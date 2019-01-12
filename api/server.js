@@ -6,13 +6,13 @@ const projectsRouter = require("../projects/projectsRouter.js");
 const server = express()
 
 
-
+configureMiddleware(server);
 
 
 server.use("/projects", projectsRouter);
 
 
-configureMiddleware(server);
+
 
 
 
