@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
       res.status(200).json(projects);
     })
     .catch(err => {
-      res.status(500).json({ error: "The projects could not be retreived." });
+      res.status(500).json({ error: "The projects could not be retrieved." });
     });
 });
 
