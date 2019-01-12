@@ -47,7 +47,7 @@ router.post("/", (req, res) => {
       })
       .catch(err => {
         res.status(500).json({
-          error: "There was an error while saving the user to the database."
+          error: "There was an error while saving the project to the database."
         });
       });
   }
