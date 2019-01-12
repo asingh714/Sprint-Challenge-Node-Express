@@ -82,25 +82,19 @@ router.put("/:id", (req, res) => {
   db.get(id)
     .then(project => {
       if (!project) {
-        res
-          .status(404)
-          .json({
-            message: "The project with the specified ID does not exist."
-          });
+        res.status(404).json({
+          message: "The project with the specified ID does not exist."
+        });
       }
       if (!changes.name || !changes.description) {
-        res
-          .status(400)
-          .json({
-            error: "Please provide name and a description for the project"
-          });
+        res.status(400).json({
+          error: "Please provide name and a description for the project"
+        });
       }
       if (changes.name.length > 128) {
-        res
-          .status(400)
-          .json({
-            error: "Please provide a name that is under 129 characters."
-          });
+        res.status(400).json({
+          error: "Please provide a name that is under 129 characters."
+        });
       }
       db.update(id, changes).then(result => {
         res.status(200).json({ result });
