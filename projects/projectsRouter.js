@@ -16,6 +16,7 @@ router.get("/", (req, res) => {
 // GET - Read with specific ID
 router.get("/:id", (req, res) => {
   const id = req.params.id;
+  
 
   db.get(id)
     .then(project => {
@@ -27,6 +28,22 @@ router.get("/:id", (req, res) => {
         .json({ error: "The project with the specified ID does not exist." });
     });
 });
+
+// GET - Actions by ID
+router.get("/actions/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.getProjectActions(id)
+    .then(action => {
+      res.status(200).json(action);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: "The project with the specified ID does not exist." });
+    });
+});
+
 
 // POST - CREATE
 router.post("/", (req, res) => {
