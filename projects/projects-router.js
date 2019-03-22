@@ -78,4 +78,45 @@ router.post("/", (req, res) => {
   }
 });
 
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  db.get(id)
+    .then(project => {
+      if (!project) {
+        res.status(404).json({
+          message: "The project with the specified ID does not exist."
+        });
+      }
+      if (!changes.name) {
+        res.status(400).json({
+          error: "Please provide a name for the project"
+        });
+      } else if (!changes.description) {
+        res.status(400).json({
+          error: "Please provide a description for the project"
+        });
+      } else if (changes.name.length > 128) {
+        res.status(400).json({
+          error: "Please provide a name that is under 129 characters."
+        });
+      }
+      db.update(id, changes)
+        .then(result => {
+          res.status(200).json({ result });
+        })
+        .catch(error => {
+          res.status(500).json({
+            error: "The project information could not be modified"
+          });
+        });
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "The project with the specified ID could not be retrieved."
+      });
+    });
+});
+
 module.exports = router;
