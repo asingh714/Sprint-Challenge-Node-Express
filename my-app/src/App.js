@@ -1,32 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 
 import Projects from "./Components/Projects";
 
-import './App.css';
+import { fetchProjects } from "./store/actions";
+
+import "./App.css";
 
 class App extends Component {
-  state = {
-    projects: [],
-    actions: []
-  }
-
   componentDidMount() {
-    axios.get("http://localhost:5000/projects")
-    .then(response => {
-      console.log(response);
-      this.setState({ projects: response.data })
-    })
-    .catch(error => console.log(error))
+    this.props.fetchProjects();
   }
 
   render() {
     return (
       <div>
-        <Projects projects={this.state.projects} />
+        <Projects {...this.props} />
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  projects: state.projects,
+  error: state.error
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchProjects }
+)(App);
