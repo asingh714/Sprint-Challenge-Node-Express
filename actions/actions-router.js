@@ -111,4 +111,24 @@ router.put("/:id", (req, res) => {
     });
 });
 
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.get(id)
+    .then(action => {
+      if (!action) {
+        res.status(404).json({
+          error: "The action with the specified ID does not exist."
+        });
+      } else {
+        db.remove(id).then(deleted => {
+          res.status(200).json(action);
+        });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: "The action could not be removed." });
+    });
+});
+
 module.exports = router;
