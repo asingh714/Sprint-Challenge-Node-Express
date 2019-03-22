@@ -66,4 +66,49 @@ router.post("/", (req, res) => {
   }
 });
 
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  db.get(id)
+    .then(action => {
+      if (!action) {
+        res.status(404).json({
+          message: "The action with the specified ID does not exist."
+        });
+      }
+      if (!changes.project_id) {
+        res.status(400).json({
+          error: "Please provide a project id for the action"
+        });
+      } else if (!changes.description) {
+        res.status(400).json({
+          error: "Please provide a description for the action"
+        });
+      } else if (!changes.notes) {
+        res.status(400).json({
+          error: "Please provide notes for the action"
+        });
+      } else if (changes.description.length > 128) {
+        res.status(400).json({
+          error: "Please provide a description that is under 129 characters."
+        });
+      }
+      db.update(id, changes)
+        .then(result => {
+          res.status(200).json({ result });
+        })
+        .catch(error => {
+          res.status(500).json({
+            error: "The action information could not be modified"
+          });
+        });
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "The action with the specified ID could not be retrieved."
+      });
+    });
+});
+
 module.exports = router;
