@@ -34,7 +34,36 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+  const action = req.body;
 
-
+  if (!action.project_id) {
+    res.status(400).json({
+      error: "Please provide a project id for the action"
+    });
+  } else if (!action.description) {
+    res.status(400).json({
+      error: "Please provide a description for the action"
+    });
+  } else if (!action.notes) {
+    res.status(400).json({
+      error: "Please provide notes for the action"
+    });
+  } else if (action.description.length > 128) {
+    res.status(400).json({
+      error: "Please provide a description that is under 129 characters."
+    });
+  } else {
+    db.insert(action)
+      .then(result => {
+        res.status(201).json(result);
+      })
+      .catch(error => {
+        res.status(500).json({
+          error: "There was an error while saving the action to the database."
+        });
+      });
+  }
+});
 
 module.exports = router;
